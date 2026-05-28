@@ -8,8 +8,8 @@ import "./index.css";
 import { AuthProvider } from "./context/AuthContext";
 import { TaskProvider } from "./context/TaskContext";
 
-import SplashScreen from "./pages/SplashScreen";
-import Login from "./pages/Login";
+import SplashScreen from "./pages/splashscreen";
+import Login from "./pages/login";
 import Dashboard from "./pages/dashboard";
 
 const savedGoogleClientId = localStorage.getItem('sync_google_client_id') || "1029384756-mockclientid.apps.googleusercontent.com";
