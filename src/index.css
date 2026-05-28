@@ -1,84 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Base Reset & Background styling */
+/* --- CUSTOM THEMING TOKENS --- */
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', sans-serif;
+}
+
 body {
   margin: 0;
-  background-color: #f0fdfa;
-  overflow: hidden;
-  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #f3fbf8;
+  color: #1e293b;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-.splash-container {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  background: linear-gradient(135deg, #edf7f3 0%, #e7f5ff 50%, #f4f7ff 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Custom High-Fidelity Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* --- PREMIUM UI GLASSMORPHISM --- */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.08);
+}
+
+/* --- HIGH-END GRADIENTS & GLOWS --- */
+.text-gradient {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.premium-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.6);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.premium-btn:active {
+  transform: translateY(0);
+}
+
+.glow-overlay {
   position: relative;
 }
+.glow-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-/* --- ANIMATION KEYFRAMES --- */
-@keyframes zoomIn {
+/* --- ADVANCED ANIMATIONS --- */
+@keyframes forceZoomIn {
   0% { opacity: 0; transform: scale(0.3); }
   100% { opacity: 1; transform: scale(1); }
 }
 
-@keyframes textReveal {
-  0% { opacity: 0; letter-spacing: -0.2em; filter: blur(8px); }
-  100% { opacity: 1; letter-spacing: 0.05em; filter: blur(0); }
-}
-
-@keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes float {
+@keyframes forceFloat {
   0%, 100% { transform: translateY(0px) rotate(-1deg); }
   50% { transform: translateY(-15px) rotate(1deg); }
 }
 
-@keyframes glow {
-  0%, 100% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.15); opacity: 0.6; }
+@keyframes forceTextReveal {
+  0% { opacity: 0; letter-spacing: -0.2em; filter: blur(8px); }
+  100% { opacity: 1; letter-spacing: 0.05em; filter: blur(0); }
 }
 
-@keyframes blob {
+@keyframes forceFadeUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes forceBlob {
   0%, 100% { transform: translate(0px, 0px) scale(1); }
   33% { transform: translate(30px, -40px) scale(1.05); }
   66% { transform: translate(-20px, 20px) scale(0.95); }
 }
 
-/* --- ANIMATION UTILITIES --- */
-.anim-zoom-in {
-  animation: zoomIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+@keyframes aiPulse {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50% { transform: scale(1.08); opacity: 0.4; }
 }
 
-.anim-float {
-  animation: float 4s ease-in-out infinite;
+@keyframes calendarFlash {
+  0% { background-color: rgba(59, 130, 246, 0.2); transform: scale(1.02); }
+  100% { background-color: transparent; transform: scale(1); }
 }
 
-.anim-text {
-  animation: textReveal 1s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
-}
-
-.anim-fade {
-  animation: fadeUp 1s ease forwards;
-}
-
-.anim-glow {
-  animation: glow 4s ease-in-out infinite;
-}
-
-.anim-blob {
-  animation: blob 10s infinite ease-in-out;
-}
-
-/* --- BACKGROUND BLOBS --- */
-.blob-1 { top: 0; left: 0; width: 24rem; height: 24rem; background: rgba(165, 243, 252, 0.3); filter: blur(64px); border-radius: 50%; position: absolute; }
-.blob-2 { bottom: 0; right: 0; width: 30rem; height: 30rem; background: rgba(191, 219, 254, 0.3); filter: blur(64px); border-radius: 50%; position: absolute; animation-delay: 2s; }
-.blob-3 { top: 50%; left: 50%; width: 18rem; height: 18rem; background: rgba(199, 210, 254, 0.2); filter: blur(64px); border-radius: 50%; position: absolute; animation-delay: 4s; }
+/* --- ANIMATION CLASS MAPPINGS --- */
+.run-zoom { animation: forceZoomIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important; }
+.run-float { animation: forceFloat 4s ease-in-out infinite !important; }
+.run-text { animation: forceTextReveal 1s cubic-bezier(0.215, 0.61, 0.355, 1) forwards !important; }
+.run-fade { animation: forceFadeUp 1s ease forwards !important; }
+.run-blob { animation: forceBlob 12s infinite ease-in-out !important; }
+.ai-pulse { animation: aiPulse 2s infinite ease-in-out !important; }
+.flash-rearrange { animation: calendarFlash 0.8s ease-out forwards; }
