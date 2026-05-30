@@ -8,6 +8,7 @@ import Heatmap from '../components/Heatmap';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
 import AIAssistant from '../components/AIAssistant';
+import DarkModeToggle from '../components/DarkModeToggle';
 
 export default function Dashboard() {
   const { currentUser, logout, updateProfileImage } = useAuth();
@@ -115,6 +116,9 @@ export default function Dashboard() {
                  <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
                </div>
             </div>
+
+            {/* Dark Mode Toggle */}
+            <DarkModeToggle />
 
             {/* Configuration Settings Button */}
             <button

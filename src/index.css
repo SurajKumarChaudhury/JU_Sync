@@ -150,3 +150,153 @@ body {
 .run-blob { animation: forceBlob 12s infinite ease-in-out !important; }
 .ai-pulse { animation: aiPulse 2s infinite ease-in-out !important; }
 .flash-rearrange { animation: calendarFlash 0.8s ease-out forwards; }
+
+/* --- DARK MODE TRANSITIONS & TOKENS --- */
+body {
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.dark {
+  background-color: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+/* Background Gradients & Blobs */
+body.dark .bg-gradient-to-tr,
+body.dark .bg-gradient-to-br {
+  background-image: linear-gradient(to top right, #090d16, #0e1626, #090d16) !important;
+}
+
+body.dark .run-blob {
+  opacity: 0.15 !important;
+}
+
+/* Header & Glass Panels */
+body.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.65) !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark .glass-card {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark .glass-card:hover {
+  background: rgba(30, 41, 59, 0.65) !important;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.15) !important;
+}
+
+/* Dashboard Sections */
+body.dark section {
+  background-color: rgba(15, 23, 42, 0.65) !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+body.dark .bg-white\/80 {
+  background-color: rgba(15, 23, 42, 0.65) !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+body.dark .bg-white\/40 {
+  background-color: rgba(30, 41, 59, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+body.dark .bg-white {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+/* Typography Overrides */
+body.dark .text-slate-800 { color: #f1f5f9 !important; }
+body.dark .text-slate-700 { color: #e2e8f0 !important; }
+body.dark .text-slate-600 { color: #cbd5e1 !important; }
+body.dark .text-slate-500 { color: #94a3b8 !important; }
+body.dark .text-slate-400 { color: #64748b !important; }
+body.dark .text-slate-900 { color: #ffffff !important; }
+
+/* Inputs and Forms */
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+
+body.dark input:focus,
+body.dark select:focus {
+  background-color: #1e293b !important;
+  border-color: #3b82f6 !important;
+}
+
+body.dark input::placeholder {
+  color: #64748b !important;
+}
+
+/* AI chat panels & buttons */
+body.dark .bg-slate-50 {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  color: #cbd5e1 !important;
+}
+
+body.dark .bg-slate-100 {
+  background-color: rgba(30, 41, 59, 0.65) !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark .bg-blue-50 {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  color: #93c5fd !important;
+}
+
+body.dark .border-slate-100 {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark .border-slate-200\/50,
+body.dark .border-slate-200\/70,
+body.dark .border-slate-200 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark .bg-slate-50\/80 {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+}
+
+/* Heatmap Grid Specifics */
+body.dark table th {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  color: #94a3b8 !important;
+}
+
+body.dark table td {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.dark table td .bg-slate-50\/40 {
+  background-color: rgba(30, 41, 59, 0.15) !important;
+}
+
+body.dark .text-slate-900 {
+  color: #f1f5f9 !important;
+}
+
+/* Task lists workload */
+body.dark .group:hover {
+  background-color: rgba(30, 41, 59, 0.45) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+body.dark .bg-slate-100 {
+  background-color: #1e293b !important;
+}
+
+body.dark .bg-slate-50\/40 {
+  background-color: rgba(30, 41, 59, 0.2) !important;
+}

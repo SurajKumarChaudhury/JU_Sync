@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/acadesk-logo.png";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 export default function SplashScreen() {
   const navigate = useNavigate();
@@ -14,6 +15,11 @@ export default function SplashScreen() {
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-gradient-to-tr from-[#eefaf4] via-[#e2f1fc] to-[#f0f3ff] flex items-center justify-center relative">
+      
+      {/* Floating Dark Mode Toggle */}
+      <div className="absolute top-6 right-6 z-50">
+        <DarkModeToggle />
+      </div>
       
       {/* Animated Background Blobs */}
       <div className="absolute top-0 left-0 w-[30rem] h-[30rem] bg-cyan-200/20 rounded-full blur-3xl run-blob"></div>

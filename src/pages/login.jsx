@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { LogIn, UserPlus, AlertCircle, Loader2, Eye, EyeOff } from "lucide-react";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 export default function Login() {
   const { login, signup, logout, loginWithGoogle } = useAuth();
@@ -48,6 +49,11 @@ export default function Login() {
   return (
     <div className="h-screen w-screen bg-gradient-to-br from-[#edf7f3] via-[#e7f5ff] to-[#f4f7ff] flex items-center justify-center px-4 relative overflow-hidden">
       
+      {/* Floating Dark Mode Toggle */}
+      <div className="absolute top-6 right-6 z-50">
+        <DarkModeToggle />
+      </div>
+
       {/* Background Blobs */}
       <div className="absolute top-10 left-10 w-96 h-96 bg-cyan-200/25 rounded-full blur-3xl run-blob"></div>
       <div className="absolute bottom-10 right-10 w-[30rem] h-[30rem] bg-blue-200/25 rounded-full blur-3xl run-blob" style={{ animationDelay: "2s" }}></div>
