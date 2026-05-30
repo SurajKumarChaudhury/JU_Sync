@@ -10,6 +10,26 @@ export default function TaskForm({ onAddTask, filterMode = 'weekly' }) {
   const [timeVal, setTimeVal] = useState('12:00'); // Daily
   const [weeklyVal, setWeeklyVal] = useState(''); // Weekly YYYY-MM-DD
   const [monthlyVal, setMonthlyVal] = useState(''); // Monthly YYYY-MM-DD
+  
+  const [type, setType] = useState('submission');
+  const [group, setGroup] = useState('Personal');
+
+  // ADHD Autosave: Restore draft in real-time on mount
+  React.useEffect(() => {
+    const savedTitle = localStorage.getItem('acadesk_autosave_title');
+    const savedCourse = localStorage.getItem('acadesk_autosave_course');
+    if (savedTitle) setTitle(savedTitle);
+    if (savedCourse) setCourse(savedCourse);
+  }, []);
+
+  // ADHD Autosave: Update drafts on changes
+  React.useEffect(() => {
+    localStorage.setItem('acadesk_autosave_title', title);
+  }, [title]);
+
+  React.useEffect(() => {
+    localStorage.setItem('acadesk_autosave_course', course);
+  }, [course]);
 
   // Generate dynamic picklists
   const getWeeklyOptions = () => {
@@ -50,7 +70,6 @@ export default function TaskForm({ onAddTask, filterMode = 'weekly' }) {
     if (weeklyOptions.length > 0) setWeeklyVal(weeklyOptions[0].value);
     
     const monthlyOptions = getMonthlyOptions();
-    // Default monthly selection to today's date if it falls in the options list
     const todayStr = format(new Date(), 'yyyy-MM-dd');
     const hasToday = monthlyOptions.some(opt => opt.value === todayStr);
     setMonthlyVal(hasToday ? todayStr : (monthlyOptions[0]?.value || ''));
@@ -69,11 +88,9 @@ export default function TaskForm({ onAddTask, filterMode = 'weekly' }) {
       finalDateStr = `${todayISOStr}T${timeVal}:00`;
     } else if (filterMode === 'weekly') {
       if (!weeklyVal) return;
-      // Default to noon on the selected weekday
       finalDateStr = `${weeklyVal}T12:00:00`;
     } else {
       if (!monthlyVal) return;
-      // Default to noon on the selected month day
       finalDateStr = `${monthlyVal}T12:00:00`;
     }
 
@@ -85,149 +102,168 @@ export default function TaskForm({ onAddTask, filterMode = 'weekly' }) {
       group
     });
 
+    // Clear inputs and autosave keys
     setTitle('');
     setCourse('');
     setType('submission');
     setGroup('Personal');
+    localStorage.removeItem('acadesk_autosave_title');
+    localStorage.removeItem('acadesk_autosave_course');
   };
-
-  const [type, setType] = useState('submission');
-  const [group, setGroup] = useState('Personal');
 
   return (
     <form 
       onSubmit={handleSubmit} 
-      className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-slate-200/60 run-fade relative overflow-hidden"
+      className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-slate-200/60 dark:border-slate-800/60 run-fade relative overflow-hidden max-w-xl mx-auto text-left"
     >
       <div className="flex items-center gap-2 mb-6">
-        <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+        <div className="p-2 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 rounded-xl animate-pulse">
           <Plus size={18} />
         </div>
         <div>
-          <h3 className="font-bold text-slate-800">Add New Deadline</h3>
-          <span className="text-[10px] text-blue-500 font-extrabold uppercase tracking-wider">
-            {filterMode} scheduler
+          <h3 className="font-bold text-slate-800 dark:text-slate-200">Add New Deadline</h3>
+          <span className="text-[10px] text-blue-500 dark:text-blue-400 font-extrabold uppercase tracking-wider">
+            {filterMode} scheduler • autosave active 🛡️
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+      <div className="space-y-6">
         
-        {/* Title Input */}
-        <div>
-          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1">
-            Deadline / Task Title
-          </label>
-          <div className="relative flex items-center">
-            <BookOpen size={16} className="absolute left-3.5 text-slate-400" />
-            <input 
-              type="text" 
-              placeholder="e.g. Lab Report, Midterm" 
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-xs font-semibold" 
-              required 
-            />
+        {/* SECTION 1: GENERAL DETAILS (Chunking Content) */}
+        <div className="p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-900/30 border border-slate-200/40 dark:border-slate-800/40 space-y-4">
+          <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2">
+            Section 1: General Details 📝
+          </span>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Title Input */}
+            <div>
+              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 ml-1">
+                Deadline / Task Title
+              </label>
+              <div className="relative flex items-center">
+                <BookOpen size={16} className="absolute left-3.5 text-slate-400" />
+                <input 
+                  type="text" 
+                  placeholder="e.g. Lab Report, Midterm" 
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 text-xs font-semibold text-slate-800 dark:text-slate-200" 
+                  required 
+                />
+              </div>
+            </div>
+
+            {/* Course Code Input */}
+            <div>
+              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 ml-1">
+                Course Code
+              </label>
+              <div className="relative flex items-center">
+                <Layers size={16} className="absolute left-3.5 text-slate-400" />
+                <input 
+                  type="text" 
+                  placeholder="e.g. CS401, EE202" 
+                  value={course}
+                  onChange={(e) => setCourse(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 text-xs font-semibold text-slate-800 dark:text-slate-200" 
+                  required 
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Course Code Input */}
-        <div>
-          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1">
-            Course Code
-          </label>
-          <div className="relative flex items-center">
-            <Layers size={16} className="absolute left-3.5 text-slate-400" />
-            <input 
-              type="text" 
-              placeholder="e.g. CS401, EE202" 
-              value={course}
-              onChange={(e) => setCourse(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-xs font-semibold" 
-              required 
-            />
-          </div>
-        </div>
+        {/* SECTION 2: SCHEDULE & CATEGORY (Chunking Content) */}
+        <div className="p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-900/30 border border-slate-200/40 dark:border-slate-800/40 space-y-4">
+          <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2">
+            Section 2: Schedule & Category ⏰
+          </span>
 
-        {/* Due Date Context Picker */}
-        <div>
-          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1">
-            {filterMode === 'daily' && 'Due Time (Hours & Minutes)'}
-            {filterMode === 'weekly' && 'Select Day of Week'}
-            {filterMode === 'monthly' && 'Select Day of Month'}
-          </label>
-          <div className="relative flex items-center">
-            <Calendar size={16} className="absolute left-3.5 text-slate-400 pointer-events-none" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             
-            {filterMode === 'daily' && (
-              <input 
-                type="time" 
-                value={timeVal}
-                onChange={(e) => setTimeVal(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-xs font-bold text-slate-600 cursor-pointer" 
-                required 
-              />
-            )}
+            {/* Due Date Context Picker */}
+            <div className="md:col-span-1">
+              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 ml-1 truncate">
+                {filterMode === 'daily' && 'Due Time (Hrs & Mins)'}
+                {filterMode === 'weekly' && 'Day of Week'}
+                {filterMode === 'monthly' && 'Day of Month'}
+              </label>
+              <div className="relative flex items-center">
+                <Calendar size={16} className="absolute left-3.5 text-slate-400 pointer-events-none" />
+                
+                {filterMode === 'daily' && (
+                  <input 
+                    type="time" 
+                    value={timeVal}
+                    onChange={(e) => setTimeVal(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer" 
+                    required 
+                  />
+                )}
 
-            {filterMode === 'weekly' && (
+                {filterMode === 'weekly' && (
+                  <select 
+                    value={weeklyVal}
+                    onChange={(e) => setWeeklyVal(e.target.value)}
+                    className="w-full pl-11 pr-8 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer appearance-none"
+                    required
+                  >
+                    {getWeeklyOptions().map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                )}
+
+                {filterMode === 'monthly' && (
+                  <select 
+                    value={monthlyVal}
+                    onChange={(e) => setMonthlyVal(e.target.value)}
+                    className="w-full pl-11 pr-8 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer appearance-none"
+                    required
+                  >
+                    {getMonthlyOptions().map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+
+            {/* Task Type */}
+            <div className="md:col-span-1">
+              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 ml-1">
+                Task Type
+              </label>
               <select 
-                value={weeklyVal}
-                onChange={(e) => setWeeklyVal(e.target.value)}
-                className="w-full pl-11 pr-8 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-xs font-bold text-slate-600 cursor-pointer appearance-none"
-                required
+                value={type} 
+                onChange={(e) => setType(e.target.value)}
+                className="w-full px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 text-xs font-bold text-slate-600 dark:text-slate-300 appearance-none cursor-pointer"
               >
-                {getWeeklyOptions().map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                ))}
+                <option value="submission">Submission</option>
+                <option value="exam">Exam</option>
+                <option value="project">Project</option>
               </select>
-            )}
+            </div>
 
-            {filterMode === 'monthly' && (
+            {/* Target Group */}
+            <div className="md:col-span-1">
+              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 ml-1">
+                Target Group
+              </label>
               <select 
-                value={monthlyVal}
-                onChange={(e) => setMonthlyVal(e.target.value)}
-                className="w-full pl-11 pr-8 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-xs font-bold text-slate-600 cursor-pointer appearance-none"
-                required
+                value={group} 
+                onChange={(e) => setGroup(e.target.value)}
+                className="w-full px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 text-xs font-bold text-slate-600 dark:text-slate-300 appearance-none cursor-pointer"
               >
-                {getMonthlyOptions().map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                ))}
+                <option value="Personal">Personal</option>
+                <option value="Group A">Group A</option>
+                <option value="Group B">Group B</option>
+                <option value="All">All Class</option>
               </select>
-            )}
-          </div>
-        </div>
+            </div>
 
-        {/* Dynamic Selects Grid */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1">
-              Task Type
-            </label>
-            <select 
-              value={type} 
-              onChange={(e) => setType(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-xs font-bold text-slate-600 appearance-none cursor-pointer"
-            >
-              <option value="submission">Submission</option>
-              <option value="exam">Exam</option>
-              <option value="project">Project</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1">
-              Target Group
-            </label>
-            <select 
-              value={group} 
-              onChange={(e) => setGroup(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-xs font-bold text-slate-600 appearance-none cursor-pointer"
-            >
-              <option value="Personal">Personal</option>
-              <option value="Group A">Group A</option>
-              <option value="Group B">Group B</option>
-              <option value="All">All Class</option>
-            </select>
           </div>
         </div>
 
@@ -235,7 +271,7 @@ export default function TaskForm({ onAddTask, filterMode = 'weekly' }) {
 
       <button 
         type="submit" 
-        className="w-full premium-btn text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-1.5 text-xs shadow-md"
+        className="w-full premium-btn text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-1.5 text-xs shadow-md mt-6"
       >
         <Plus size={16} />
         Add to Timetable

@@ -24,9 +24,12 @@ export default function GoogleSync({ task }) {
       reminders: {
         useDefault: false,
         overrides: [
-          { method: 'email', minutes: 24 * 60 }, // Email reminder to Gmail 24 hours before
-          { method: 'email', minutes: 30 },      // Email reminder to Gmail 30 minutes before
-          { method: 'popup', minutes: 30 }       // Push notification to Phone 30 minutes before
+          { method: 'email', minutes: 7 * 24 * 60 }, // 1 week before (Standard prep warning)
+          { method: 'email', minutes: 3 * 24 * 60 }, // 3 days before (Middle warning)
+          { method: 'email', minutes: 24 * 60 },     // 1 day before (Critical warning - Email)
+          { method: 'email', minutes: 3 * 60 },      // 3 hours before (Urgent prep alert - Email)
+          { method: 'popup', minutes: 30 },          // 30 minutes before (Final action push notification)
+          { method: 'email', minutes: 30 }           // 30 minutes before (Urgent Gmail)
         ]
       }
     };

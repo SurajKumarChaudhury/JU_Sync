@@ -300,3 +300,31 @@ body.dark .bg-slate-100 {
 body.dark .bg-slate-50\/40 {
   background-color: rgba(30, 41, 59, 0.2) !important;
 }
+
+/* --- ADHD ACCESSIBILITY STANDARDS --- */
+body {
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+}
+
+/* Thick high-contrast focus rings to assist form tabbing wayfinding */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 2px !important;
+}
+
+/* Strict reduction of sensory overwhelm: disable auto-animations if prefers-reduced-motion is active */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .run-float, .run-zoom, .run-fade, .run-blob, .ai-pulse, .animate-bounce, .animate-pulse, .animate-spin {
+    animation: none !important;
+    transform: none !important;
+  }
+}

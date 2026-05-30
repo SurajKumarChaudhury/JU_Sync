@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTasks } from '../context/TaskContext';
-import { Calendar, LogOut, User, Database, Settings } from 'lucide-react';
+import { Calendar, LogOut, User, Database, Settings, Zap } from 'lucide-react';
 
 import Heatmap from '../components/Heatmap';
 import TaskForm from '../components/TaskForm';
@@ -18,6 +18,7 @@ export default function Dashboard() {
   const [showSettings, setShowSettings] = useState(false);
   const [apiKey, setApiKey] = useState(localStorage.getItem('sync_gemini_api_key') || '');
   const [googleClientId, setGoogleClientId] = useState(localStorage.getItem('sync_google_client_id') || '');
+  const [energyLevel, setEnergyLevel] = useState('medium'); // 'low' | 'medium' | 'high'
   const fileInputRef = React.useRef(null);
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
@@ -142,6 +143,41 @@ export default function Dashboard() {
         </div>
       </header>
 
+      {/* ADHD Brain Energy State Selector */}
+      <div className="max-w-7xl mx-auto px-6 mb-8 relative z-20">
+        <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-md p-5 rounded-3xl border border-slate-200/50 dark:border-slate-800/60 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-amber-50 dark:bg-amber-950/40 text-amber-500 rounded-xl">
+              <Zap size={18} className="animate-pulse" />
+            </div>
+            <div className="text-left">
+              <h3 className="font-bold text-slate-800 dark:text-slate-200 text-sm">How is your brain energy today?</h3>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">Acadesk will match your task sorting to your executive focus battery.</p>
+            </div>
+          </div>
+          <div className="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl border border-slate-200/50 dark:border-slate-700/50 text-[11px] font-bold">
+            <button
+              onClick={() => setEnergyLevel('low')}
+              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-1.5 ${energyLevel === 'low' ? 'bg-emerald-500 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`}
+            >
+              🔋 Low (Easy Wins first)
+            </button>
+            <button
+              onClick={() => setEnergyLevel('medium')}
+              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-1.5 ${energyLevel === 'medium' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`}
+            >
+              ⚡ Balanced
+            </button>
+            <button
+              onClick={() => setEnergyLevel('high')}
+              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-1.5 ${energyLevel === 'high' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`}
+            >
+              🚀 High (Complex first)
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Main Dashboard Workspace Grid */}
       <main className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
         
@@ -159,7 +195,7 @@ export default function Dashboard() {
           
           <TaskForm onAddTask={(task) => addTask(task.title, task.course, task.date, task.type, task.group)} filterMode={heatmapMode} />
 
-          <TaskList filterMode={heatmapMode} />
+          <TaskList filterMode={heatmapMode} energyLevel={energyLevel} />
 
         </div>
 
